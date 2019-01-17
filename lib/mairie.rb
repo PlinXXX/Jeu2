@@ -29,16 +29,17 @@ end
 city_temp.each do |link|
 	townhall_url << link['href']
 end
-
+#puts "#{townhall_url[0].delete('.html')}.html"
 
 =begin
 def get_townhall_email(townhall_url)
 	th_email = []
 	townhall_url.each do |th_page|
-		th_email_page = Nokogiri::HTML(open("http://annuaire-des-mairies.com/#{th_page.delete('./')}"))
+		th_email_page = Nokogiri::HTML(open("http://annuaire-des-mairies.com/#{townhall_url[0].delete('.html')}.html"))
 		th_email = th_email_page.xpath('//tr/td')
 	puts th_email
 	end
 end
 get_townhall_email(townhall_url)
 =end
+puts "http://annuaire-des-mairies.com/#{townhall_url[0].tap {|s| s.slice(0)}}"
