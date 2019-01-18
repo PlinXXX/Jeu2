@@ -1,16 +1,40 @@
 #récupérer la liste complète des députés de France, ainsi que leurs adresses email. Cherche par toi-même le site le plus aisé à scrapper et stocke les informations extraites dans une array de hashs
-require 'twitter'
-require 'dotenv'
+
 require 'nokogiri'
 require 'open-uri'
 
-  Dotenv.load
+page = Nokogiri::HTML(open("https://coinmarketcap.com/all/views/all/"))
 
-@client = Twitter::REST::Client.new do |config|
-  config.consumer_key        = ENV["TWITTER_CONSUMER_KEY"]
-  config.consumer_secret     = ENV["TWITTER_CONSUMER_SECRET"]
-  config.access_token        = ENV["TWITTER_ACCESS_TOKEN"]
-  config.access_token_secret = ENV["TWITTER_ACCESS_TOKEN_SECRET"]
+def which_is_the_max(a , b)
+	if a.length > b.length
+		@sup = a.length
+		@inf = b.length
+	elsif a.length < b.length
+		@inf = a.length
+		@sup = b.length
+	else
+		return "#{a} = #{b}"
+	end
 end
 
-page = Nokogiri::HTML(open("https://coinmarketcap.com/all/views/all/"))
+def fusion(ar1 , ar2)
+	which_is_the_max(ar1 , ar2)
+	if @sup % @inf != 0
+		puts "Ces tableaux ne sont pas assemblables!"
+	else
+		result = []
+		n = ar1.length
+		i = 0
+		while i < ar2.length 
+			newar2 = []
+			for j in i..(i+n-1)
+				newar2 << ar2[j]
+			end
+			result << Hash[ar1.zip(newar2)]
+			i += n
+		end
+		result.inspect
+	end
+end
+
+puts fusion(A , B)
