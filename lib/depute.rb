@@ -17,12 +17,10 @@ def which_is_the_max(a , b)
 	end
 end
 
+A = [1, 2, 3]
+B = ['a','z','e','r','t','y','i','o','p','s','d','f','g','h','j','k','l','m','c','v','b','n']
 def fusion(ar1 , ar2)
-	which_is_the_max(ar1 , ar2)
-	if @sup % @inf != 0
-		puts "Ces tableaux ne sont pas assemblables!"
-	else
-		result = []
+	result = []
 		n = ar1.length
 		i = 0
 		while i < ar2.length 
@@ -34,7 +32,6 @@ def fusion(ar1 , ar2)
 			i += n
 		end
 		result.inspect
-	end
 end
 
 puts fusion(A , B)
