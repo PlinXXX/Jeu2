@@ -1,4 +1,4 @@
-Nokogiri un est outil incontournable quand on veut scrapper en Ruby. Il permet de lire des pages HTML et en récupérer les informations que tu souhaites.
+aNokogiri un est outil incontournable quand on veut scrapper en Ruby. Il permet de lire des pages HTML et en récupérer les informations que tu souhaites.
 
 Pour utiliser Nokogiri, les lignes de code de base sont :
 

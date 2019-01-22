@@ -1,37 +1,60 @@
-#récupérer la liste complète des députés de France, ainsi que leurs adresses email. Cherche par toi-même le site le plus aisé à scrapper et stocke les informations extraites dans une array de hashs
-
-require 'nokogiri'
 require 'open-uri'
+require 'nokogiri'
 
-page = Nokogiri::HTML(open("https://coinmarketcap.com/all/views/all/"))
 
-def which_is_the_max(a , b)
-	if a.length > b.length
-		@sup = a.length
-		@inf = b.length
-	elsif a.length < b.length
-		@inf = a.length
-		@sup = b.length
-	else
-		return "#{a} = #{b}"
-	end
+def get_url
+  urls = []
+
+  doc = Nokogiri::HTML(open("https://www.nosdeputes.fr/deputes"))
+  doc.xpath('//div[@class="list_table"]//a/@href').each { |ele| urls << ele.to_s}
+
+  return urls.each { |url| url.insert(0, "https://www.nosdeputes.fr")}
 end
 
-A = [1, 2, 3]
-B = ['a','z','e','r','t','y','i','o','p','s','d','f','g','h','j','k','l','m','c','v','b','n']
-def fusion(ar1 , ar2)
-	result = []
-		n = ar1.length
-		i = 0
-		while i < ar2.length 
-			newar2 = []
-			for j in i..(i+n-1)
-				newar2 << ar2[j]
-			end
-			result << Hash[ar1.zip(newar2)]
-			i += n
-		end
-		result.inspect
+
+def get_name
+  names = []
+
+  doc = Nokogiri::HTML(open("https://www.nosdeputes.fr/deputes"))
+  doc.xpath('//span[@class="list_nom"]').each { |ele| names << ele.text.delete!(',').split }
+
+  return names
 end
 
-puts fusion(A , B)
+
+def get_email
+  urls = get_url
+  names = get_name
+  emails = []
+  n = 0
+
+  (urls.length).times do
+    doc = Nokogiri::HTML(open(urls[n]))
+    doc.xpath('//a[contains(text(),"@assemblee")]').each { |email| emails << email.text }
+    n += 1
+  end
+  emails = emails.delete_if { |email| email.include? 'bureau-m' }
+  return emails.delete_if { |email| email.include? 'secretariat' }
+end
+
+
+def email_depute_scrapper
+  array = []
+
+  names = get_name  
+  emails = get_email
+  n = 0
+
+  begin
+    (emails.length).times do
+      array << Hash["fist_name", names[n][1], "last_name", names[n][0], "email", emails[n].to_s]
+      n += 1
+    end
+  rescue => e
+  	
+  end
+
+  return array
+end
+
+puts email_depute_scrapper
